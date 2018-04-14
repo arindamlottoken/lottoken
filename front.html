@@ -337,9 +337,10 @@ function listenForClicks (miniToken, web3) {
       var min_contrib = document.getElementById('organize_input_min_participant_contribution').value.trim().toLowerCase()
       
       //need to add test that balanceOf LOTT > org_contrib
-      
-      miniToken.Organize(hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
-
+       
+      miniToken.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}) 
+        .then (function () { miniToken.Organize(hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
+      }).catch(console.error)
                            
     }) 
   
