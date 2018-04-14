@@ -19,17 +19,273 @@
 
 <script>
 
-const contract_address = '0x8C381b4200c7bFC66523df6df6C3D162602a7B5d'
-const etherValue = web3.toWei(10, 'ether');
+const COIN_ADDRESS = '0x2B7842e7e218603D0c8b5c48da0E17D23b3905C1'
+const CONTRACT_ADDRESS = '0xdaB433D13ddD7C15d922EFE7e44e3fD9f42f388C'
+
 var address = '0x91612055A68aD74A6e756615941Ac59e9220A940'
-var balzoo = ''
-var keyblurb = ''
-var emailblurb = ''
-var get_email_blurb = ''
-var phoneblurb = ''
-var temp_address =''
-var temp_token_address = ''
-var recovery_test_address = '0x343546f68d2a167084d28EB570a2D219D803E14A'
+
+const ABI_LOTTOKEN = [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "tok_addr",
+          "type": "address"
+        }
+      ],
+      "name": "set_sta",
+      "outputs": [],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "nonpayable"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "org",
+          "type": "address"
+        }
+      ],
+      "name": "num_participants",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "view"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "all_lot",
+      "outputs": [
+        {
+          "name": "organizer",
+          "type": "address"
+        },
+        {
+          "name": "trigger",
+          "type": "address"
+        },
+        {
+          "name": "contribution_req",
+          "type": "uint256"
+        },
+        {
+          "name": "hold_time",
+          "type": "uint256"
+        },
+        {
+          "name": "timeout",
+          "type": "uint256"
+        },
+        {
+          "name": "pool_amount",
+          "type": "uint256"
+        },
+        {
+          "name": "winner",
+          "type": "address"
+        },
+        {
+          "name": "creation_time",
+          "type": "uint256"
+        },
+        {
+          "name": "contest_running",
+          "type": "bool"
+        },
+        {
+          "name": "draw",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "view"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "lotto_hold_time",
+          "type": "uint256"
+        },
+        {
+          "name": "participant_contribution",
+          "type": "uint256"
+        },
+        {
+          "name": "lotto_trigger",
+          "type": "address"
+        },
+        {
+          "name": "organizer_contrib",
+          "type": "uint256"
+        }
+      ],
+      "name": "Organize",
+      "outputs": [],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "nonpayable"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "org",
+          "type": "address"
+        }
+      ],
+      "name": "gettri",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "view"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "contribution",
+          "type": "uint256"
+        },
+        {
+          "name": "org",
+          "type": "address"
+        }
+      ],
+      "name": "Participate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "nonpayable"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "scratchpad",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "view"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "org",
+          "type": "address"
+        }
+      ],
+      "name": "getpo",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "view"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "org",
+          "type": "address"
+        }
+      ],
+      "name": "getoa",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "view"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "get_sta",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "view"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "org",
+          "type": "address"
+        }
+      ],
+      "name": "draw_random",
+      "outputs": [],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "nonpayable"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "seed",
+          "type": "uint256"
+        },
+        {
+          "name": "modulo",
+          "type": "uint256"
+        }
+      ],
+      "name": "randomGen",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "stateMutability": "view"
+    }
+  ]
+
 
 window.addEventListener('load', function() {
     // Check if Web3 has been injected by the browser:
@@ -47,19 +303,25 @@ window.addEventListener('load', function() {
 function startApp(web3) {
     //alert("entro");
     const eth = new Eth(web3.currentProvider)
-    const token = eth.contract(abi).at(contract_address);
-    listenForClicks(token,web3)
+    const contract_token = eth.contract(ABI_LOTTOKEN).at(CONTRACT_ADDRESS);
+    listenForClicks(contract_token,web3)
     //alert("llego");
 }
 
 function listenForClicks (miniToken, web3) {
-    var button = document.querySelector('button.transferFunds')
-    var button_cancel = document.querySelector('button.cancelFunds')
+    var buy_button = document.querySelector('button.Buy')
+    var organize_button = document.querySelector('button.Organize')
+    var participate_button = document.querySelector('button.Participate')
+    var approve_button = document.querySelector('button.Approve')
+    var participate_button = document.querySelector('button.Participate')
+    var draw_button = document.querySelector('button.Draw')
+    
+    
     
 }
 
 </script>
-<button class="BuyLottoken">Buy Lottokens </button>
+<button class="Buy">Buy Lottokens </button>
 <br>
 <br>
 <br>
