@@ -24,6 +24,7 @@ const CONTRACT_ADDRESS = '0xdaB433D13ddD7C15d922EFE7e44e3fD9f42f388C'
 
 var address = '0x91612055A68aD74A6e756615941Ac59e9220A940'
 
+
 const ABI_LOTTOKEN = [
     {
       "constant": false,
@@ -286,6 +287,177 @@ const ABI_LOTTOKEN = [
     }
   ]
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+const ERC20_ABI = [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "who",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "name": "spender",
+          "type": "address"
+        }
+      ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    }
+  ]
 
 window.addEventListener('load', function() {
     // Check if Web3 has been injected by the browser:
@@ -318,6 +490,8 @@ function listenForClicks (miniToken, web3) {
     var participate_button = document.querySelector('button.Participate')
     var draw_button = document.querySelector('button.Draw')
     
+    var coinContract = ''
+    
     web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
     
     buy_button.addEventListener('click', function() {
@@ -336,9 +510,11 @@ function listenForClicks (miniToken, web3) {
       var org_contrib = document.getElementById('organize_input_organizer_contribution').value.trim().toLowerCase()
       var min_contrib = document.getElementById('organize_input_min_participant_contribution').value.trim().toLowerCase()
       
+      coinContract = web3.eth.contract(ERCO20_ABI).at(COIN_ADDRESS)
+      
       //need to add test that balanceOf LOTT > org_contrib
        
-      miniToken.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}) 
+      coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}) 
         .then (function () { miniToken.Organize(hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
       }).catch(console.error)
                            
