@@ -510,7 +510,7 @@ function listenForClicks (miniToken, web3) {
       var org_contrib = document.getElementById('organize_input_organizer_contribution').value.trim().toLowerCase()
       var min_contrib = document.getElementById('organize_input_min_participant_contribution').value.trim().toLowerCase()
       
-      coinContract = web3.eth.contract(ERCO20_ABI).at(COIN_ADDRESS)
+      coinContract = web3.eth.contract(ERC20_ABI).at(COIN_ADDRESS)
       
       //need to add test that balanceOf LOTT > org_contrib
        
