@@ -513,10 +513,18 @@ function listenForClicks (miniToken, web3) {
       coinContract = web3.eth.contract(ERC20_ABI).at(COIN_ADDRESS)
       
       //need to add test that balanceOf LOTT > org_contrib
+      console.log("Parameters for calling organize")
+      console.log(hold_time)
+      console.log(min_contrib)
+      console.log(trig_addr)
+      console.log(org_contrib)
        
       coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000},  function(err, result) { console.log(result) })
+      .then( function() {
       miniToken.Organize(hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
-    
+      }).catch(console.error)
+        
+        
       //    .then (function () { miniToken.Organize(hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
     //  }).catch(console.error)
                            
