@@ -23,6 +23,8 @@ const COIN_ADDRESS = '0x2B7842e7e218603D0c8b5c48da0E17D23b3905C1'
 const CONTRACT_ADDRESS = '0xdaB433D13ddD7C15d922EFE7e44e3fD9f42f388C'
 
 var address = '0x91612055A68aD74A6e756615941Ac59e9220A940'
+var coinContract = ''
+var toobie = ''
 
 
 const ABI_LOTTOKEN = [
@@ -479,7 +481,54 @@ function startApp(web3) {
     listenForClicks(contract_token,web3)
     //alert("llego");
 }
+
+web3.eth.getTransactionReceiptMined= function getTransactionReceiptMined(txHash, interval) {
+    const self = this;
+    const transactionReceiptAsync = function(resolve, reject) {
+        self.getTransactionReceipt(txHash, (error, receipt) => {
+            if (error) {
+                reject(error);
+            } else if (receipt == null) {
+                setTimeout(
+                    () => transactionReceiptAsync(resolve, reject),
+                    interval ? interval : 500);
+            } else {
+                resolve(receipt);
+            }
+        });
+    };
+
+    if (Array.isArray(txHash)) {
+        return Promise.all(txHash.map(
+            oneTxHash => self.getTransactionReceiptMined(oneTxHash, interval)));
+    } else if (typeof txHash === "string") {
+        return new Promise(transactionReceiptAsync);
+    } else {
+        throw new Error("Invalid Type: " + txHash);
+    }
+};
   
+const promisify = (inner) =>
+    new Promise((resolve, reject) =>
+        inner((err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        })
+    );
+
+async function getBalance6() {
+    var temp_tok_bal
+    temp_tok_bal = promisify(cb => coinContract.balanceOf(address, cb))
+    try {
+        toobie = web3.toDecimal(await temp_tok_bal);
+    } catch (error) {
+        
+    }
+}
+
 
 
 function listenForClicks (miniToken, web3) {
@@ -490,14 +539,13 @@ function listenForClicks (miniToken, web3) {
     var participate_button = document.querySelector('button.Participate')
     var draw_button = document.querySelector('button.Draw')
     
-    var coinContract = ''
-    
     web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
-    
+
+    coinContract = web3.eth.contract(ERC20_ABI).at(COIN_ADDRESS)
+        
     buy_button.addEventListener('click', function() {
       
       var buy_amount = document.getElementById('buy_lottoken_amount').value.trim().toLowerCase()
-
       web3.eth.sendTransaction( {from: address, to: COIN_ADDRESS, value: buy_amount * web3.toWei("0.01", "ether") , gas:100000}, function(err, result) { console.log(result) }  )
                   
     }) 
@@ -510,23 +558,33 @@ function listenForClicks (miniToken, web3) {
       var org_contrib = document.getElementById('organize_input_organizer_contribution').value.trim().toLowerCase()
       var min_contrib = document.getElementById('organize_input_min_participant_contribution').value.trim().toLowerCase()
       
-      coinContract = web3.eth.contract(ERC20_ABI).at(COIN_ADDRESS)
-      
       //need to add test that balanceOf LOTT > org_contrib
+      
       console.log("Parameters for calling organize")
       console.log(hold_time)
       console.log(min_contrib)
       console.log(trig_addr)
       console.log(org_contrib)
-       
-      coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000},  function(err, result) { console.log(result) })
-      .then( function() {
-      miniToken.Organize(hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
-      }).catch(console.error)
-        
-        
-      //    .then (function () { miniToken.Organize(hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
-    //  }).catch(console.error)
+      
+        getBalance6()
+          .then (function () { coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}) 
+            
+           .then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+
+           return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
+                console.log("receipt");
+                console.log(receipt);
+ 
+               miniToken.Organize( hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000},
+                                  function(err, result) { console.log(result) }  )
+          
+                });  
+        }) .catch(console.error);
+        }) .catch(console.error);
+  
+  
                            
     }) 
   
