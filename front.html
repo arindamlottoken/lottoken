@@ -567,7 +567,7 @@ function listenForClicks (miniToken, web3) {
       console.log(org_contrib)
       
         getBalance6()
-          .then (function () { coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}) 
+          .then (function () { coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result) }) 
             
            .then(function (txHash) {
             console.log('Transaction sent')
