@@ -19,7 +19,10 @@
 
 <script>
 
-const COIN_ADDRESS = '0x2B7842e7e218603D0c8b5c48da0E17D23b3905C1'
+const BUY_ADDRESS = '0x2B7842e7e218603D0c8b5c48da0E17D23b3905C1'
+
+const COIN_ADDRESS = '0x57B1303C388b56292f6D869832394dA20Ee16eEe'
+
 const CONTRACT_ADDRESS = '0xdaB433D13ddD7C15d922EFE7e44e3fD9f42f388C'
 
 var address = '0x91612055A68aD74A6e756615941Ac59e9220A940'
@@ -546,7 +549,7 @@ function listenForClicks (miniToken, web3) {
     buy_button.addEventListener('click', function() {
       
       var buy_amount = document.getElementById('buy_lottoken_amount').value.trim().toLowerCase()
-      web3.eth.sendTransaction( {from: address, to: COIN_ADDRESS, value: buy_amount * web3.toWei("0.01", "ether") , gas:100000}, function(err, result) { console.log(result) }  )
+      web3.eth.sendTransaction( {from: address, to: BUY_ADDRESS, value: buy_amount * web3.toWei("0.01", "ether") , gas:100000}, function(err, result) { console.log(result) }  )
                   
     }) 
     
