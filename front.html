@@ -635,7 +635,7 @@ function listenForClicks (miniToken, web3) {
       console.log(address)
       console.log("Organizer address")
       console.log(org_addr)
-      miniToken.draw_random( org_addr, {from: address, to: COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
+      miniToken.draw_random( org_addr, {from: address, to: COIN_ADDRESS, gas:300000}, function(err, result) { console.log(result) }  )
 
     }) 
     
