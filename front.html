@@ -477,7 +477,7 @@ window.addEventListener('load', function() {
 function startApp(web3) {
     //alert("entro");
     const eth = new Eth(web3.currentProvider)
-    const contract_token = eth.contract(ABI_LOTTOKEN).at(CONTRACT_ADDRESS);
+    const contract_token = eth.contract(ABI_LOTTOKEN).at(COIN_ADDRESS);
     listenForClicks(contract_token,web3)
     //alert("llego");
 }
@@ -541,7 +541,7 @@ function listenForClicks (miniToken, web3) {
     
     web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
 
-    coinContract = web3.eth.contract(ERC20_ABI).at(COIN_ADDRESS)
+    coinContract = web3.eth.contract(ERC20_ABI).at(CONTRACT_ADDRESS)
         
     buy_button.addEventListener('click', function() {
       
