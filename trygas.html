@@ -527,7 +527,7 @@ async function gp7() {
     var temp_tok_bal2
     temp_tok_bal2 = promisify(cb => web3.eth.getGasPrice())
     try {
-        gas_price_now = web3.toDecimal(await temp_tok_bal2);
+        gas_price_now = await temp_tok_bal2;
     } catch (error) {
         
     }
