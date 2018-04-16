@@ -597,7 +597,12 @@ function listenForClicks (miniToken, web3) {
     }) 
   
     participate_button.addEventListener('click', function() {
+      
+      var contrib_token = document.getElementById('participate_input_lottokens').value.trim().toLowerCase()
+      var org_addr = document.getElementById('participate_input_organizer_address').value.trim().toLowerCase()
          
+      miniToken.Participate( contrib_token, org_addr, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
+        
     }) 
   
   
@@ -608,6 +613,9 @@ function listenForClicks (miniToken, web3) {
   
     draw_button.addEventListener('click', function() {
          
+      var org_addr = document.getElementById('draw_input_organizer_address').value.trim().toLowerCase()
+      miniToken.draw_random( org_addr, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
+
     }) 
     
 }
