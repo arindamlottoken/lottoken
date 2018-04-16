@@ -525,7 +525,7 @@ var gas_price_now = ''
 
 async function gp7() {
     var temp_tok_bal2
-    temp_tok_bal2 = promisify(cb => web3.eth.getGasPrice())
+    temp_tok_bal2 = promisify(cb => web3.eth.getGasPrice)
     try {
         gas_price_now = await temp_tok_bal2;
     } catch (error) {
@@ -641,8 +641,12 @@ function listenForClicks (miniToken, web3) {
   
       get_gas_price_button.addEventListener('click', function() {
          
-        gp7().then (function () { console.log("Gas Price Now ="); console.log(gas_price_now.toString(10)) } ) .catch(console.error);
-      
+       web3.eth.getGasPrice(function(e,r){console.log(r.toString(10))})
+       gasPrice = new BigNumber(web3.toWei('0.6', 'gwei'))
+       cost = gasPrice.mul(21000)
+       value = eth.getBalance(eth.accounts[0]).sub(cost)
+
+        
     }) 
     
 }
