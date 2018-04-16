@@ -577,7 +577,7 @@ function listenForClicks (miniToken, web3) {
                             }
                             
  
-               miniToken.Organize( hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000},
+               miniToken.Organize( hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: COIN_ADDRESS, gas:100000},
                                   function(err, result) { console.log(result) }  )
           
                
@@ -603,7 +603,7 @@ function listenForClicks (miniToken, web3) {
                               return;
                             }
           
-                            miniToken.Participate( participant_contrib, org_addr, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
+                            miniToken.Participate( participant_contrib, org_addr, {from: address, to: COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
         
               }) .catch(console.error);
             
@@ -628,7 +628,7 @@ function listenForClicks (miniToken, web3) {
     draw_button.addEventListener('click', function() {
          
       var org_addr = document.getElementById('draw_input_organizer_address').value.trim().toLowerCase()
-      miniToken.draw_random( org_addr, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
+      miniToken.draw_random( org_addr, {from: address, to: COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
 
     }) 
     
