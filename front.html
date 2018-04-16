@@ -616,14 +616,14 @@ function listenForClicks (miniToken, web3) {
     approve_organizer_button.addEventListener('click', function() {
       
       var org_contrib = document.getElementById('organize_input_organizer_contribution').value.trim().toLowerCase()
-      coinContract.approve( COIN_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result); return result }) 
+      coinContract.approve( COIN_ADDRESS, org_contrib, {from: address, to:CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result); return result }) 
          
     }) 
   
    approve_participant_button.addEventListener('click', function() {
       
      var participant_contrib = document.getElementById('participate_input_lottokens').value.trim().toLowerCase()
-      coinContract.approve( COIN_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result); return result }) 
+      coinContract.approve( COIN_ADDRESS, org_contrib, {from: address, to:CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result); return result }) 
          
     }) 
   
