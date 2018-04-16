@@ -534,7 +534,8 @@ function listenForClicks (miniToken, web3) {
   
     var buy_button = document.querySelector('button.Buy')
     var organize_button = document.querySelector('button.Organize')
-    var approve_button = document.querySelector('button.Approve')
+    var approve_organizer_button = document.querySelector('button.Approve_organizer')
+    var approve_participant_button = document.querySelector('button.Approve_participant')
     var participate_button = document.querySelector('button.Participate')
     var draw_button = document.querySelector('button.Draw')
     
@@ -609,8 +610,16 @@ function listenForClicks (miniToken, web3) {
     }) 
   
   
-    approve_button.addEventListener('click', function() {
+    approve_organizer_button.addEventListener('click', function() {
       
+      var org_contrib = document.getElementById('organize_input_organizer_contribution').value.trim().toLowerCase()
+      coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result); return result }) 
+         
+    }) 
+  
+   approve_participant_button.addEventListener('click', function() {
+      
+     var participant_contrib = document.getElementById('participate_input_lottokens').value.trim().toLowerCase()
       coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result); return result }) 
          
     }) 
@@ -641,7 +650,7 @@ Organizer's Contribution <input type="text" size="50" id="organize_input_organiz
 <br>
 Minimum Participant Contribution <input type="text" size="50" id="organize_input_min_participant_contribution" />
 <br>
-<button class="Approve">Approve !</button>
+<button class="Approve_organizer">Approve !</button>
 <button class="Organize">Organize!</button>
 <br>
 <br>
@@ -651,7 +660,7 @@ Organizer's Address <input type="text" size="50" id="participate_input_organizer
 <br>
 Number of Lottokens <input type="text" size="50" id="participate_input_lottokens" />
 <br>
-<button class="Approve">Approve !</button> 
+<button class="Approve_participant">Approve !</button> 
 <button class="Participate">Participate!</button>
 <br>
 <br>
