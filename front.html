@@ -530,7 +530,6 @@ async function getBalance6() {
 }
 
 
-
 function listenForClicks (miniToken, web3) {
   
     var buy_button = document.querySelector('button.Buy')
@@ -575,22 +574,14 @@ function listenForClicks (miniToken, web3) {
                               alert("You donot have enough Lottokens. You need to buy more Lottokens.");
                               return;
                             }
-                            coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result); return result }) 
-            
-           .then(function (txHash) {
-            console.log('Transaction sent')
-            console.dir(txHash)
-
-           return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
-                console.log("receipt");
-                console.log(receipt);
+                            
  
                miniToken.Organize( hold_time, min_contrib, trig_addr, org_contrib, {from: address, to: CONTRACT_ADDRESS, gas:100000},
                                   function(err, result) { console.log(result) }  )
           
                 });  
         }) .catch(console.error);
-        }) .catch(console.error);
+       
   
   
                            
@@ -598,15 +589,29 @@ function listenForClicks (miniToken, web3) {
   
     participate_button.addEventListener('click', function() {
       
-      var contrib_token = document.getElementById('participate_input_lottokens').value.trim().toLowerCase()
+      var participant_contrib = document.getElementById('participate_input_lottokens').value.trim().toLowerCase()
       var org_addr = document.getElementById('participate_input_organizer_address').value.trim().toLowerCase()
-         
-      miniToken.Participate( contrib_token, org_addr, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
+      
+          getBalance6()
+          .then (function () { 
+          
+                            console.log("Lottoken balance"); 
+                            console.log(toobie); 
+                            if (toobie < participant_contrib) {
+                              alert("You donot have enough Lottokens. You need to buy more Lottokens.");
+                              return;
+                            }
+          
+                            miniToken.Participate( participant_contrib, org_addr, {from: address, to: CONTRACT_ADDRESS, gas:100000}, function(err, result) { console.log(result) }  )
         
+              }) .catch(console.error);
+            
     }) 
   
   
     approve_button.addEventListener('click', function() {
+      
+      coinContract.approve( CONTRACT_ADDRESS, org_contrib, {from: address, to:COIN_ADDRESS, gas:100000}, function(err, result) { console.log(result); return result }) 
          
     }) 
   
